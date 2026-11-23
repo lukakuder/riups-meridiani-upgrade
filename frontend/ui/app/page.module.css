@@ -101,6 +101,145 @@ button.account:hover {
   white-space: nowrap;
 }
 
+.accountMenu {
+  position: relative;
+  padding: 0 1rem 0 0.45rem;
+}
+
+.accountProfile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.accountProfile:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+
+.profilePanel.profilePanel {
+  top: 3.35rem;
+  left: 0;
+  width: min(20rem, calc(100vw - 1.5rem));
+}
+
+.profileCard {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 1.25rem;
+  background: var(--color-surface);
+  box-shadow: 0 1.25rem 3.5rem rgba(20 37 74, 0.22);
+  color: var(--color-text);
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.15rem 1.25rem 1rem;
+  background: var(--color-card);
+}
+
+.profileAvatar {
+  display: grid;
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #e4e9f4;
+  color: #4559a4;
+  font-size: 1rem;
+  font-weight: 850;
+}
+
+.profileEyebrow {
+  margin: 0 0 0.25rem;
+  color: #627197;
+  font-size: 0.62rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+}
+
+.profileTitle {
+  margin: 0;
+  color: var(--color-text-strong);
+  font-size: 1.25rem;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.profileDetails {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #edf0f7;
+}
+
+.profileDetails div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.profileDetails dt {
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.profileDetails dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--color-text-strong);
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-align: right;
+}
+
+.profileActions {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.85rem 1.25rem 1.25rem;
+}
+
+.profileAction {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-card);
+  color: var(--color-text-strong);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+  transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+
+.profileAction:hover {
+  border-color: #b6d2ff;
+  background: #eff6ff;
+  transform: translateY(-1px);
+}
+
+.profileAction:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .logout {
   margin-left: 0.25rem;
   padding: 0 0 0 0.7rem;

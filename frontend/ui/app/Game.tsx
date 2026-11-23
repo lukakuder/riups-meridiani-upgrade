@@ -566,13 +566,13 @@ function Game() {
       )}
       {gameState === 'ready' && !isHelpOpen && (
         <FloatingPanel position="top-left" priority="high" className={styles.readyControls}>
+          <AccountControls user={auth.user} onLogin={() => setIsAuthOpen(true)} onLogout={auth.logout} />
           <GameButton
             type="help"
             label={gameText.instructions.eyebrow}
             hover
             onClick={() => setIsHelpOpen(true)}
           />
-          <AccountControls user={auth.user} onLogin={() => setIsAuthOpen(true)} onLogout={auth.logout} />
         </FloatingPanel>
       )}
       {gameState === 'started' && (

@@ -170,6 +170,15 @@ export const gameText = {
       unavailable: 'Strežnik trenutno ni dosegljiv. Poskusi znova.',
     },
   },
+  profile: {
+    title: 'Profil uporabnika',
+    eyebrow: 'MOJ PROFIL',
+    emailLabel: 'E-pošta',
+    memberSinceLabel: 'Član od',
+    editProfile: 'Urejanje profila',
+    myChallenges: 'Moji izzivi',
+    createChallenge: 'Ustvari nov izziv',
+  },
   footer: {
     name: 'Meridiani',
     description: 'Šolski projekt',
