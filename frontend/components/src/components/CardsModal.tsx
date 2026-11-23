@@ -10,6 +10,8 @@ export type CardsModalBackButton = {
 
 export type CardsModalProps = {
   isOpen: boolean;
+  className?: string;
+  overlayClassName?: string;
   eyebrow?: ReactNode;
   title: ReactNode;
   description?: ReactNode;
@@ -20,6 +22,8 @@ export type CardsModalProps = {
 
 const CardsModal = ({
   isOpen,
+  className,
+  overlayClassName,
   eyebrow,
   title,
   description,
@@ -28,7 +32,11 @@ const CardsModal = ({
   backButton,
 }: CardsModalProps) => {
   return (
-    <Modal isOpen={isOpen} className={`${styles.modal} ${backButton ? styles.withBack : ''}`}>
+    <Modal
+      isOpen={isOpen}
+      overlayClassName={overlayClassName}
+      className={[styles.modal, backButton ? styles.withBack : '', className].filter(Boolean).join(' ')}
+    >
       {backButton && (
         <div className={styles.backRow}>
           <GameButton type="back" onClick={backButton.onClick} label={backButton.label} />
