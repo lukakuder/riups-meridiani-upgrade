@@ -1,5 +1,5 @@
 import type { AuthUser } from '@/api/types';
-import { FloatingPanel } from '@meridiani/components';
+import { CardsModal, FloatingPanel } from '@meridiani/components';
 import { useEffect, useRef, useState } from 'react';
 import { gameText } from './gameText';
 import styles from './page.module.css';
@@ -19,6 +19,7 @@ const UserIcon = () => (
 
 function AccountControls({ user, onLogin, onLogout }: AccountControlsProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [profilePage, setProfilePage] = useState<'edit' | 'challenges' | 'create' | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,7 +53,27 @@ function AccountControls({ user, onLogin, onLogout }: AccountControlsProps) {
     );
   }
 
+  const openProfilePage = (page: 'edit' | 'challenges' | 'create') => {
+    setIsProfileOpen(false);
+    setProfilePage(page);
+  };
+
+  const closeProfilePage = () => {
+    setProfilePage(null);
+    setIsProfileOpen(true);
+  };
+
+  const profilePageTitle =
+    profilePage === 'edit'
+      ? gameText.profile.editProfilePage
+      : profilePage === 'challenges'
+        ? gameText.profile.myChallengesPage
+        : profilePage === 'create'
+          ? gameText.profile.createChallengePage
+          : '';
+
   return (
+    <>
     <div ref={menuRef} className={`${styles.account} ${styles.accountMenu}`}>
       <button
         type="button"
@@ -102,13 +123,13 @@ function AccountControls({ user, onLogin, onLogout }: AccountControlsProps) {
               </div>
             </dl>
             <div className={styles.profileActions}>
-              <button type="button" className={styles.profileAction}>
+              <button type="button" className={styles.profileAction} onClick={() => openProfilePage('edit')}>
                 {gameText.profile.editProfile}
               </button>
-              <button type="button" className={styles.profileAction}>
+              <button type="button" className={styles.profileAction} onClick={() => openProfilePage('challenges')}>
                 {gameText.profile.myChallenges}
               </button>
-              <button type="button" className={styles.profileAction}>
+              <button type="button" className={styles.profileAction} onClick={() => openProfilePage('create')}>
                 {gameText.profile.createChallenge}
               </button>
             </div>
@@ -116,6 +137,17 @@ function AccountControls({ user, onLogin, onLogout }: AccountControlsProps) {
         </FloatingPanel>
       )}
     </div>
+    <CardsModal
+      isOpen={profilePage !== null}
+      className={styles.profilePageModal}
+      overlayClassName={styles.profilePageOverlay}
+      title={profilePageTitle}
+      backButton={{
+        onClick: closeProfilePage,
+        label: gameText.profile.backLabel,
+      }}
+    />
+    </>
   );
 }
 

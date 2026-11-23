@@ -240,6 +240,18 @@ button.account:hover {
   outline-offset: 2px;
 }
 
+.profilePageModal.profilePageModal {
+  height: calc(100dvh - 6rem);
+  box-sizing: border-box;
+  padding-top: 2.5rem;
+  padding-bottom: 1.125rem;
+}
+
+.profilePageOverlay.profilePageOverlay {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
 .logout {
   margin-left: 0.25rem;
   padding: 0 0 0 0.7rem;

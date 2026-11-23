@@ -178,6 +178,10 @@ export const gameText = {
     editProfile: 'Urejanje profila',
     myChallenges: 'Moji izzivi',
     createChallenge: 'Ustvari nov izziv',
+    editProfilePage: 'Urejanje profila',
+    myChallengesPage: 'Moji izzivi',
+    createChallengePage: 'Ustvari nov izziv',
+    backLabel: 'Nazaj',
   },
   footer: {
     name: 'Meridiani',
