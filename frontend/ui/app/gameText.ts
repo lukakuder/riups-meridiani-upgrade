@@ -89,6 +89,9 @@ export const gameText = {
       pointsUnit: 'od 1',
     },
   },
+  multipleChoice: {
+    testButton: 'Test: izbirno vprašanje',
+  },
   errors: {
     unknown: 'Prišlo je do napake. Poskusi znova.',
     mapApiFallback: (error: string) =>
