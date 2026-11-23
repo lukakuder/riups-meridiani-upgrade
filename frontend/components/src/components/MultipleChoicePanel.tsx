@@ -11,7 +11,6 @@ export type MultipleChoicePanelProps = {
     onNext?: () => void;
 }
 
-
 const MultipleChoicePanel = ({ prompt, options, correctAnswer, onSubmit, onNext }: MultipleChoicePanelProps) => {
     const [selected, setSelected] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
@@ -33,7 +32,7 @@ const MultipleChoicePanel = ({ prompt, options, correctAnswer, onSubmit, onNext 
     return (
         <section className={`${questionStyles.panel} ${styles.panel} ${submitted ? (isCorrect ? questionStyles.correct : questionStyles.incorrect) : ''}`}>
             <div className={questionStyles.content}>
-                <h2 className={questionStyles.question}>{prompt}</h2>
+                <h2 className={`${questionStyles.question} ${styles.question}`}>{prompt}</h2>
             </div>
             <div className={styles.options} role="radiogroup">
                 {options.map((option) => (
