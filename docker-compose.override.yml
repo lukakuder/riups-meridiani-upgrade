@@ -1,0 +1,50 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    init: true
+    volumes:
+      - /app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./backend/src
+          target: /app/src
+        - action: sync
+          path: ./backend/drizzle
+          target: /app/drizzle
+        - action: rebuild
+          path: ./backend/package.json
+        - action: rebuild
+          path: ./backend/package-lock.json
+        - action: rebuild
+          path: ./backend/Dockerfile.dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api
+      NEXT_PUBLIC_USE_MOCK_QUESTIONS: "false"
+      NEXT_PUBLIC_USE_MOCK_GEO: "true"
+    volumes:
+      - /app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/ui
+          target: /app/ui
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./frontend/components
+        - action: rebuild
+          path: ./frontend/package.json
+        - action: rebuild
+          path: ./frontend/package-lock.json
+        - action: rebuild
+          path: ./frontend/ui/package.json
+        - action: rebuild
+          path: ./frontend/Dockerfile.dev

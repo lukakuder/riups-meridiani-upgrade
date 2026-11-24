@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // Docker sliko sestavimo iz samostojne gradnje, lokalna gradnja ostane nespremenjena
+  transpilePackages: ['@meridiani/components'],
   output: process.env.NEXT_OUTPUT === "standalone" ? "standalone" : undefined,
   experimental: {
     agentFeedback: true,
