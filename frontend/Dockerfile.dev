@@ -1,0 +1,23 @@
+FROM node:22-slim
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY components/package.json components/
+COPY ui/package.json ui/
+RUN npm ci
+
+# Make the whole app tree owned by `node` so dev scripts can write
+COPY --chown=node:node . .
+
+RUN npm run build --workspace components && chown -R node:node /app
+
+ENV NODE_ENV=development \
+    HOSTNAME=0.0.0.0 \
+    PORT=3000 \
+    WATCHPACK_POLLING=true
+
+USER node
+EXPOSE 3000
+
+CMD ["npm", "run", "dev", "-w", "@meridiani/ui"]
