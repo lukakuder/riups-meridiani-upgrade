@@ -10,10 +10,20 @@ Učna igra iz geografije in zgodovine za 7., 8. in 9. razred osnovne šole. Uče
 
 ## Zagon z Dockerjem
 
+### Uporaba Dockerja za razvoj
+
+Za to potrebujemo ukaz:
+``` bash
+docker compose up --build --watch
+```
+Ob vsaki posodobitvi se naša slika ponovno zažene
+
+### Izgradnja celotne aplikacije
+
 Potrebuješ samo Docker Desktop. V korenu repozitorija zaženi:
 
 ```bash
-docker compose up --build -d
+docker compose -f docker-compose.yml up -d
 ```
 
 Prvi zagon traja nekaj minut, ker se gradita sliki. Ukaz se konča, ko sta baza in API pripravljena. Backend ob vsakem zagonu sam izvede migracije in napolni vprašanja, datotek `.env` ni treba ustvarjati.
@@ -48,13 +58,3 @@ Privzete vrednosti so primerne za razvoj. Če jih želiš spremeniti, jih zapiš
 | `CORS_ORIGIN` | `http://localhost:3000` | Naslov aplikacije, ki sme klicati API |
 | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | `meridiani` | Veljajo ob prvem ustvarjanju baze. Na strežniku nastavi svoje geslo |
 | `JWT_SECRET` | Vrednost za razvoj | Ključ za podpisovanje žetonov, vsaj 32 znakov. Na strežniku nastavi svojo naključno vrednost |
-
-## Razvoj brez Dockerja
-
-Med razvojem je priročno, da v Dockerju teče samo baza, backend in frontend pa lokalno. Vsebnika aplikacije in API-ja zasedata vrata 3000 in 8080, zato ju prej ustavi:
-
-```bash
-docker compose stop frontend backend
-```
-
-Navodila so v [backend/README.md](backend/README.md) in [frontend/README.md](frontend/README.md).
