@@ -47,7 +47,7 @@ import AppLoadingSpinner from './AppLoadingSpinner';
 import AuthDialog from './AuthDialog';
 import PointsAward from './PointsAward';
 import styles from './page.module.css';
-import { mockMultipleChoiceQuestion } from '@/api/mockMultipleChoice';
+import { checkMultipleChoiceAnswer, getMultipleChoiceQuestions, type MultipleChoiceQuestion } from '@/api/multipleChoiceQuestions';
 
 import { LngLat as MapLngLat, Marker, setWorkerUrl } from 'maplibre-gl';
 setWorkerUrl('maplibre-gl-worker.mjs');
@@ -92,7 +92,10 @@ function Game() {
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [isMultipleChoiceTestOpen, setIsMultipleChoiceTestOpen] = useState(false);
+  const [multipleChoiceQuestions, setMultipleChoiceQuestions] = useState<MultipleChoiceQuestion[]>([]);
+  const [multipleChoiceIndex, setMultipleChoiceIndex] = useState(0);
+  const multipleChoiceQuestion = multipleChoiceQuestions[multipleChoiceIndex];
+  const [multipleChoiceAnswer, setMultipleChoiceAnswer] = useState<string>();
   const [leaderboardData, setLeaderboardData] = useState<{
     modeId: number;
     entries: ComponentLeaderboardEntry[];
@@ -579,7 +582,11 @@ function Game() {
             type="next"
             label={gameText.multipleChoice.testButton}
             hover
-            onClick={() => setIsMultipleChoiceTestOpen(true)}
+            onClick={async () => {
+              setMultipleChoiceQuestions(await getMultipleChoiceQuestions('cities'));
+              setMultipleChoiceIndex(0);
+              setMultipleChoiceAnswer(undefined);
+            }}
           />
           <AccountControls user={auth.user} onLogin={() => setIsAuthOpen(true)} onLogout={auth.logout} />
         </FloatingPanel>
@@ -658,11 +665,20 @@ function Game() {
           loadingLabel={<AppLoadingSpinner label={gameText.leaderboard.loadingState} />}
         />
       )}
-      {isMultipleChoiceTestOpen && (
+      {multipleChoiceQuestion && (
         <FloatingPanel position="center" mobilePosition="bottom-center" priority="high">
           <MultipleChoicePanel
-            {...mockMultipleChoiceQuestion}
-            onNext={() => setIsMultipleChoiceTestOpen(false)}
+            key={multipleChoiceQuestion.id}
+            prompt={multipleChoiceQuestion.prompt}
+            options={multipleChoiceQuestion.options}
+            correctAnswer={multipleChoiceAnswer}
+            onSubmit={async (answer) =>
+              setMultipleChoiceAnswer((await checkMultipleChoiceAnswer(multipleChoiceQuestion.id, answer)).correctAnswer)
+            }
+            onNext={() => {
+              setMultipleChoiceAnswer(undefined);
+              setMultipleChoiceIndex((index) => index + 1);
+            }}
           />
         </FloatingPanel>
       )}
