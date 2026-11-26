@@ -22,6 +22,7 @@ import {
   PlayerScore,
   QuestionPanel,
   ResultSummary,
+  TextAnswerPanel,
 } from '@meridiani/components';
 import type {
   LeaderboardContent,
@@ -48,6 +49,7 @@ import AuthDialog from './AuthDialog';
 import PointsAward from './PointsAward';
 import styles from './page.module.css';
 import { checkMultipleChoiceAnswer, getMultipleChoiceQuestions, type MultipleChoiceQuestion } from '@/api/multipleChoiceQuestions';
+import { checkTextAnswer, getTextAnswerQuestions, type TextAnswerQuestion } from '@/api/textAnswerQuestions';
 
 import { LngLat as MapLngLat, Marker, setWorkerUrl } from 'maplibre-gl';
 setWorkerUrl('maplibre-gl-worker.mjs');
@@ -92,10 +94,17 @@ function Game() {
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+
   const [multipleChoiceQuestions, setMultipleChoiceQuestions] = useState<MultipleChoiceQuestion[]>([]);
   const [multipleChoiceIndex, setMultipleChoiceIndex] = useState(0);
   const multipleChoiceQuestion = multipleChoiceQuestions[multipleChoiceIndex];
   const [multipleChoiceAnswer, setMultipleChoiceAnswer] = useState<string>();
+
+  const [textQuestions, setTextQuestions] = useState<TextAnswerQuestion[]>([]);
+  const [textIndex, setTextIndex] = useState(0);
+  const [textResult, setTextResult] = useState<{ isCorrect: boolean; correctAnswer: string }>();
+  const textQuestion = textQuestions[textIndex];
+
   const [leaderboardData, setLeaderboardData] = useState<{
     modeId: number;
     entries: ComponentLeaderboardEntry[];
@@ -583,9 +592,21 @@ function Game() {
             label={gameText.multipleChoice.testButton}
             hover
             onClick={async () => {
+              setTextQuestions([]);
               setMultipleChoiceQuestions(await getMultipleChoiceQuestions('cities'));
               setMultipleChoiceIndex(0);
               setMultipleChoiceAnswer(undefined);
+            }}
+          />
+          <GameButton
+            type="next"
+            label={gameText.textAnswer.testButton}
+            hover
+            onClick={async () => {
+              setMultipleChoiceQuestions([]);
+              setTextQuestions(await getTextAnswerQuestions('cities'));
+              setTextIndex(0);
+              setTextResult(undefined);
             }}
           />
           <AccountControls user={auth.user} onLogin={() => setIsAuthOpen(true)} onLogout={auth.logout} />
@@ -678,6 +699,22 @@ function Game() {
             onNext={() => {
               setMultipleChoiceAnswer(undefined);
               setMultipleChoiceIndex((index) => index + 1);
+            }}
+          />
+        </FloatingPanel>
+      )}
+      {textQuestion && (
+        <FloatingPanel position="center" mobilePosition="bottom-center" priority="high">
+          <TextAnswerPanel
+            key={textQuestion.id}
+            prompt={textQuestion.prompt}
+            isCorrect={textResult?.isCorrect}
+            correctAnswer={textResult?.correctAnswer}
+            placeholder={gameText.textAnswer.placeholder}
+            onSubmit={async (answer) => setTextResult(await checkTextAnswer(textQuestion.id, answer))}
+            onNext={() => {
+              setTextResult(undefined);
+              setTextIndex((index) => index + 1);
             }}
           />
         </FloatingPanel>
