@@ -17,6 +17,7 @@ import {
   GameplayInstructions,
   Leaderboards,
   LoadingSpinner,
+  MultipleChoicePanel,
   Overlay,
   PlayerScore,
   QuestionPanel,
@@ -46,6 +47,7 @@ import AppLoadingSpinner from './AppLoadingSpinner';
 import AuthDialog from './AuthDialog';
 import PointsAward from './PointsAward';
 import styles from './page.module.css';
+import { mockMultipleChoiceQuestion } from '@/api/mockMultipleChoice';
 
 import { LngLat as MapLngLat, Marker, setWorkerUrl } from 'maplibre-gl';
 setWorkerUrl('maplibre-gl-worker.mjs');
@@ -90,6 +92,7 @@ function Game() {
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isMultipleChoiceTestOpen, setIsMultipleChoiceTestOpen] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState<{
     modeId: number;
     entries: ComponentLeaderboardEntry[];
@@ -566,13 +569,19 @@ function Game() {
       )}
       {gameState === 'ready' && !isHelpOpen && (
         <FloatingPanel position="top-left" priority="high" className={styles.readyControls}>
-          <AccountControls user={auth.user} onLogin={() => setIsAuthOpen(true)} onLogout={auth.logout} />
           <GameButton
             type="help"
             label={gameText.instructions.eyebrow}
             hover
             onClick={() => setIsHelpOpen(true)}
           />
+          <GameButton
+            type="next"
+            label={gameText.multipleChoice.testButton}
+            hover
+            onClick={() => setIsMultipleChoiceTestOpen(true)}
+          />
+          <AccountControls user={auth.user} onLogin={() => setIsAuthOpen(true)} onLogout={auth.logout} />
         </FloatingPanel>
       )}
       {gameState === 'started' && (
@@ -648,6 +657,14 @@ function Game() {
           isLoading={isLoadingLeaderboards}
           loadingLabel={<AppLoadingSpinner label={gameText.leaderboard.loadingState} />}
         />
+      )}
+      {isMultipleChoiceTestOpen && (
+        <FloatingPanel position="center" mobilePosition="bottom-center" priority="high">
+          <MultipleChoicePanel
+            {...mockMultipleChoiceQuestion}
+            onNext={() => setIsMultipleChoiceTestOpen(false)}
+          />
+        </FloatingPanel>
       )}
       <CardsModal
         isOpen={isModalOpen}
