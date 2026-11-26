@@ -1,9 +1,10 @@
 import { notInArray, sql } from "drizzle-orm";
 import { db, pool } from "./index.js";
-import { guessCountries, questions, multipleChoiceQuestions } from "./schema.js";
+import { guessCountries, questions, multipleChoiceQuestions, textAnswerQuestions } from "./schema.js";
 import { seedGuessCountries } from "./seedGuessCountries.js";
 import { seedQuestions } from "./seedQuestions.js";
 import { seedMultipleChoiceQuestions } from "./seedMultipleChoiceQuestions.js";
+import { seedTextAnswerQuestions } from "./seedTextAnswerQuestions.js";
 
 // Ob ponovnem zagonu obstoječa vprašanja posodobi in odstrani tista, ki jih ni več v seznamu
 try {
@@ -69,7 +70,25 @@ try {
         },
       }
     );
+    await tx.delete(textAnswerQuestions).where(
+      notInArray(
+        textAnswerQuestions.id,
+        seedTextAnswerQuestions.map(({ id }) => id),
+      ),
+    );
+    await tx
+      .insert(textAnswerQuestions)
+      .values(seedTextAnswerQuestions)
+      .onConflictDoUpdate({
+        target: textAnswerQuestions.id,
+        set: {
+          category: sql`excluded.category`,
+          prompt: sql`excluded.prompt`,
+          answer: sql`excluded.answer`,
+        },
+      });
   });
+    
 
   const count = await db.$count(questions);
   const countryCount = await db.$count(guessCountries);

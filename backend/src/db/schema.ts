@@ -109,9 +109,17 @@ export const multipleChoiceQuestions = pgTable("multiple_choice_questions", {
   answer: text("answer").notNull(),
 });
 
+export const textAnswerQuestions = pgTable("text_answer_questions", {
+  id: integer("id").primaryKey(),
+  category: questionCategory("category").notNull(),
+  prompt: text("prompt").notNull(),
+  answer: text("answer").notNull(),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Question = typeof questions.$inferSelect;
 export type NewQuestion = typeof questions.$inferInsert;
 export type NewGuessCountry = typeof guessCountries.$inferInsert;
 export type NewMultipleChoiceQuestion = typeof multipleChoiceQuestions.$inferInsert;
+export type NewTextAnswerQuestion = typeof textAnswerQuestions.$inferInsert;

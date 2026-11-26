@@ -1,8 +1,9 @@
 import { eq, sql } from "drizzle-orm";
 import { Router } from "express";
 import { db } from "../db/index.js";
-import { questions, multipleChoiceQuestions } from "../db/schema.js";
+import { questions, multipleChoiceQuestions, textAnswerQuestions} from "../db/schema.js";
 import { scoreAnswer, scoreCountryAnswer, type LngLat } from "../scoring.js";
+import { isAcceptedCountryName } from "../countryGuess.js";
 
 const QUESTIONS_PER_GAME = 10;
 
@@ -113,4 +114,41 @@ questionsRouter.post("/multiple-choice/check", async (req, res) => {
   }
 
   res.json({ isCorrect: answer === question.answer, correctAnswer: question.answer });
+});
+
+questionsRouter.get("/text-answer", async (req, res) => {
+  const { type } = req.query;
+  if (!isGameMode(type)) {
+    res.status(400).json({ error: `Parameter type mora biti eden od: ${Object.keys(gameModeCategories).join(", ")}` });
+    return;
+  }
+
+  const rows = await db
+    .select({ id: textAnswerQuestions.id, prompt: textAnswerQuestions.prompt })
+    .from(textAnswerQuestions)
+    .where(eq(textAnswerQuestions.category, gameModeCategories[type]))
+    .orderBy(sql`random()`)
+    .limit(QUESTIONS_PER_GAME);
+
+  res.json(rows);
+});
+
+questionsRouter.post("/text-answer/check", async (req, res) => {
+  const { questionId, answer } = (req.body ?? {}) as Record<string, unknown>;
+  if (!Number.isInteger(questionId) || typeof answer !== "string") {
+    res.status(400).json({ error: "Telo zahteve mora vsebovati questionId in answer" });
+    return;
+  }
+
+  const [question] = await db
+    .select({ answer: textAnswerQuestions.answer })
+    .from(textAnswerQuestions)
+    .where(eq(textAnswerQuestions.id, questionId as number));
+
+  if (!question) {
+    res.status(404).json({ error: `Vprašanje ${questionId} ne obstaja` });
+    return;
+  }
+
+  res.json({ isCorrect: isAcceptedCountryName(answer, [question.answer]), correctAnswer: question.answer });
 });
