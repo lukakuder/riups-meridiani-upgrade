@@ -101,8 +101,17 @@ export const countryGuessRounds = pgTable(
   (t) => [primaryKey({ columns: [t.gameId, t.position] })],
 );
 
+export const multipleChoiceQuestions = pgTable("multiple_choice_questions", {
+  id: integer("id").primaryKey(),
+  category: questionCategory("category").notNull(),
+  prompt: text("prompt").notNull(),
+  options: text("options").array().notNull(),
+  answer: text("answer").notNull(),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Question = typeof questions.$inferSelect;
 export type NewQuestion = typeof questions.$inferInsert;
 export type NewGuessCountry = typeof guessCountries.$inferInsert;
+export type NewMultipleChoiceQuestion = typeof multipleChoiceQuestions.$inferInsert;
