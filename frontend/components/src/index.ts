@@ -47,3 +47,5 @@ export { default as ResultSummary } from './components/ResultSummary';
 export type { ResultSummaryContent, ResultSummaryProps } from './components/ResultSummary';
 export { default as MultipleChoicePanel } from './components/MultipleChoicePanel';
 export type { MultipleChoicePanelProps } from './components/MultipleChoicePanel';
+export { default as TextAnswerPanel } from './components/TextAnswerPanel';
+export type { TextAnswerPanelProps } from './components/TextAnswerPanel';

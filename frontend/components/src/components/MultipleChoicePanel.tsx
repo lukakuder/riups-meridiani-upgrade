@@ -6,19 +6,18 @@ import styles from './MultipleChoicePanel.module.css';
 export type MultipleChoicePanelProps = {
     prompt: ReactNode;
     options: string[];
-    correctAnswer: string;
+    correctAnswer?: string;
     onSubmit?: (answer: string) => void;
     onNext?: () => void;
 }
 
 const MultipleChoicePanel = ({ prompt, options, correctAnswer, onSubmit, onNext }: MultipleChoicePanelProps) => {
     const [selected, setSelected] = useState<string | null>(null);
-    const [submitted, setSubmitted] = useState(false);
+    const submitted = correctAnswer !== undefined;
     const isCorrect = submitted && selected === correctAnswer;
 
     const submit = () => {
         if (!selected) return;
-        setSubmitted(true);
         onSubmit?.(selected);
     };
 

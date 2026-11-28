@@ -90,7 +90,11 @@ export const gameText = {
     },
   },
   multipleChoice: {
-    testButton: 'Test: multi choice',
+    testButton: 'Več odgovorov',
+  },
+  textAnswer: {
+    testButton: 'Pisni odgovor',
+    placeholder: 'Vpiši odgovor',
   },
   errors: {
     unknown: 'Prišlo je do napake. Poskusi znova.',

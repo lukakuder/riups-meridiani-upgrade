@@ -22,6 +22,20 @@
       "when": 1793883190979,
       "tag": "0002_country_guess",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795706625451,
+      "tag": "0003_multiple_choice_questions",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795712415220,
+      "tag": "0004_text_answer_questions",
+      "breakpoints": true
     }
   ]
 }
